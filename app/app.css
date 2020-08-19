@@ -1,0 +1,9 @@
+
+.title-dark-primary{
+  font-size: 3rem;
+  color:#000 !important;
+  font-weight: 700;
+}
+.title-dark-primary:hover{
+  color:#000 !important;
+}
