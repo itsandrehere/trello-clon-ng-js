@@ -4,7 +4,7 @@
       <nav class="navbar">
         <a class="navbar-brand title-dark-primary">Board de tareas</a>
         <form class="form-inline">
-          <button class="btn btn-primary my-2 my-sm-0" ng-click="addColumn()">
+          <button class="btn btn-primary btn-add-cl my-2 my-sm-0" ng-click="addColumn()">
             Agregar columna
           </button>
         </form>
@@ -12,27 +12,30 @@
 
       <div class="board">
         <div ng-repeat="list in column" class="list">
-          <div class="name-section">
-            <input class="form-control input-name" ng-model="list.nameColumn" focus-me="{{shouldBeOpen}}"
+          <div class="name-section" ng-mouseover="delete = true" ng-mouseleave="delete = false">
+            <input class="form-control input-name" ng-model="list.nameColumn" focus-me="{{inputColumn}}"
               ng-blur="beforeClickName(list)" />
-            <button class="btn" ng-click="deleteColumn($index)">
-              <ion-icon name="close-outline"></ion-icon>
+            <button ng-show="delete" class="btn-delete" ng-click="deleteColumn($index)">
+              <i class="fas fa-times"></i>
             </button>
           </div>
-          <div class="list­-content">
-            <div ng-repeat="card in list.card" class="input-group" ng-mouseover="open = true"
+          <div dnd-list="list.card" ng-class="{'card-none': list.card.length === 0}" class="list­-content">
+            <div ng-repeat="card in list.card" dnd-draggable="card" dnd-moved="list.card.splice($index, 1)"
+              dnd-effect-allowed="move" dnd-selected="models.selected = item"
+              ng-class="{'selected': models.selected === item}" class="input-group" ng-mouseover="open = true"
               ng-mouseleave="open = false">
-              <input class="form-control" type="text" ng-model="card.title" />
+              <input class="form-control" type="text" ng-model="card.title" focus-input="{{inputCard}}"
+                ng-blur="beforeClickCard(card , list.card)" />
               <div ng-show="open" ng-click="deleteCard(list.card, $index)" class="input-group-prepend">
-                <button class="btn">
-                  <ion-icon name="close-outline"></ion-icon>
+                <button class="btn-input">
+                  <i class="fas fa-times"></i>
                 </button>
               </div>
 
             </div>
           </div>
           <button ng-click="addCards(list)" class="btn btn-outline-primary btn-block">
-            <ion-icon name="add-outline"></ion-icon> Agregar card
+            <i class="fas fa-plus"></i> Agregar card
           </button>
         </div>
 

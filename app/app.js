@@ -1,6 +1,6 @@
 'use strict';
 
-var angularRoutingApp = angular.module('myApp', ['ngRoute']);
+var angularRoutingApp = angular.module('myApp', ['ngRoute', 'dndLists']);
 
 
 angularRoutingApp.config(function ($routeProvider) {
@@ -45,11 +45,12 @@ angularRoutingApp.controller('homeController', function ($scope, $location) {
   //crud
   $scope.addColumn = function () { 
     $scope.column.push({nameColumn: '', card: []});
-    $scope.shouldBeOpen = true;
+    $scope.inputColumn = true;
   }
   
   $scope.addCards = function (list) { 
     list.card.push({})
+    $scope.inputCard = true;
   }
 
   $scope.deleteColumn = function (index) { 
@@ -65,11 +66,15 @@ angularRoutingApp.controller('homeController', function ($scope, $location) {
   $scope.beforeClickName = function (list) { 
     if(list.nameColumn == ''){
       $scope.column.pop();
-      console.log($scope.column);
     }
   }
-
-  
+ 
+  $scope.beforeClickCard = function (item, list) { 
+    if(item.title == undefined){
+      list.pop();
+    }
+  }
+ 
 });
 
 angularRoutingApp.directive('focusMe', function($timeout) {
@@ -82,6 +87,22 @@ angularRoutingApp.directive('focusMe', function($timeout) {
           $timeout(function() {
             element[0].focus(); 
           });
+        }
+      });
+    }
+  };
+});
+
+angularRoutingApp.directive('focusInput', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+      scope.$watch(attrs.focusInput, function(value) {
+        if(value === true) { 
+          console.log('value=',value);
+          //$timeout(function() {
+            element[0].focus();
+            scope[attrs.focusMe] = false;
+          //});
         }
       });
     }
