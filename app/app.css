@@ -1,9 +1,69 @@
-
-.title-dark-primary{
-  font-size: 3rem;
-  color:#000 !important;
+body {
+  background-color: #f7f9fb;
+  overflow-x: scroll;
+}
+.title-dark-primary {
+  font-size: 2rem;
+  color: #34384a !important;
   font-weight: 700;
 }
-.title-dark-primary:hover{
-  color:#000 !important;
+.title-dark-primary:hover {
+  color: #34384a !important;
+}
+
+.board {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+.list {
+  flex: 0 0 30%;
+  background-color: #ffffff;
+  padding: 3% 2%;
+  border: 1px solid #cfcfcf;
+  border-radius: 5px;
+  margin: 1%;
+}
+
+.list .form-control {
+  margin: 3% 0%;
+}
+.list ion-icon {
+  color: #3380f7;
+}
+.list .name-section {
+  display: flex;
+  justify-content: space-between;
+}
+.list .name-section .input-name {
+  padding: 10px;
+  border: none;
+  background: transparent;
+}
+.input-name:focus {
+  box-shadow: none;
+}
+
+.input-group-prepend {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* bootstrap custom */
+.btn-primary {
+  color: #fff;
+  background-color: #3380f7;
+  border-color: #3380f7;
+}
+.btn-outline-primary {
+  color: #3380f7;
+  border-color: #3380f7;
+}
+
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #3380f7;
+  border-color: #3380f7;
 }

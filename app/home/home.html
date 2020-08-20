@@ -1,31 +1,42 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<body ng-controller="homeController">
+  <div class="container-fluid">
+    <div class="container">
+      <nav class="navbar">
+        <a class="navbar-brand title-dark-primary">Board de tareas</a>
+        <form class="form-inline">
+          <button class="btn btn-primary my-2 my-sm-0" ng-click="addColumn()">
+            Agregar columna
+          </button>
+        </form>
+      </nav>
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+      <div class="board">
+        <div ng-repeat="list in column" class="list">
+          <div class="name-section">
+            <input class="form-control input-name" ng-model="list.nameColumn" focus-me="{{shouldBeOpen}}"
+              ng-blur="beforeClickName(list)" />
+            <button class="btn" ng-click="deleteColumn($index)">
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+          </div>
+          <div class="list­-content">
+            <div ng-repeat="card in list.card" class="input-group" ng-mouseover="open = true"
+              ng-mouseleave="open = false">
+              <input class="form-control" type="text" ng-model="card.title" />
+              <div ng-show="open" ng-click="deleteCard(list.card, $index)" class="input-group-prepend">
+                <button class="btn">
+                  <ion-icon name="close-outline"></ion-icon>
+                </button>
+              </div>
 
-    <title>Trello Clone</title>
+            </div>
+          </div>
+          <button ng-click="addCards(list)" class="btn btn-outline-primary btn-block">
+            <ion-icon name="add-outline"></ion-icon> Agregar card
+          </button>
+        </div>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="../app.css"> 
-
-</head>
-
-<body>
-
-    <div class="container-fluid">
-        <nav class="navbar">
-            <a class="navbar-brand title-dark-primary">Board de tareas</a>
-            <form class="form-inline">
-                <button class="btn btn-primary my-2 my-sm-0" type="submit">Agregar columna</button>
-            </form>
-        </nav>
-
+      </div>
     </div>
-
+  </div>
 </body>
-
-</html>
