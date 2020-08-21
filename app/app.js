@@ -2,9 +2,7 @@
 
 var angularRoutingApp = angular.module('myApp', ['ngRoute', 'dndLists', 'ngStorage']);
 
-
 angularRoutingApp.config(function ($routeProvider) {
-  // Routes will be here
   $routeProvider.when('/', {
     templateUrl: 'home/home.html',
     controller: 'homeController'
@@ -14,66 +12,92 @@ angularRoutingApp.config(function ($routeProvider) {
 });
 
 angularRoutingApp.controller('homeController', function ($scope, $location, $localStorage) {
-  console.log("entrando")
- 
+
   //validando el storage
-  if($localStorage.column !== undefined){
-    $scope.column  = $localStorage.column 
-  }else{
+  if ($localStorage.column !== undefined) {
+    $scope.column = $localStorage.column
+  } else {
     $scope.column = [];
   }
+
+  //clon para el filtrado
+  $scope.filteredData = $scope.column;
+
 
   // funciones
 
   //crud
-  $scope.addColumn = function () { 
-    $scope.column.push({nameColumn: '', card: []});
+  $scope.addColumn = function () {
+    $scope.column.push({ nameColumn: '', card: [] });
     $scope.inputColumn = true;
-   
+    $localStorage.column = $scope.column;
   }
-  
-  $scope.addCards = function (list) { 
+
+  $scope.addCards = function (list) {
     list.card.push({})
     $scope.inputCard = true;
-  }
-
-  $scope.deleteColumn = function (index) { 
-    $scope.column.splice(index,1);
     $localStorage.column = $scope.column;
   }
 
-  $scope.deleteCard = function (list, index) { 
-    list.splice(index,1);
+  $scope.deleteColumn = function (index) {
+    $scope.column.splice(index, 1);
     $localStorage.column = $scope.column;
-  }  
+  }
+
+  $scope.deleteCard = function (list, index) {
+    list.splice(index, 1);
+    $localStorage.column = $scope.column;
+  }
 
   //actiones
-  $scope.beforeClickName = function (list) { 
-    if(list.nameColumn == ''){
+  $scope.beforeClickName = function (list) {
+    if (list.nameColumn == '') {
       $scope.column.pop();
     }
     $localStorage.column = $scope.column;
   }
- 
-  $scope.beforeClickCard = function (item, list) { 
-    if(item.title == undefined){
+
+  $scope.beforeClickCard = function (item, list) {
+    if (item.title == undefined) {
       list.pop();
     }
     //actualizando storage
     $localStorage.column = $scope.column;
   }
- 
+
+
+  $scope.search = function () {
+    $scope.inputCard = false;
+    $scope.inputColumn = false;
+
+    //filtrar en el array por el name
+    var searchValue = document.getElementById("search").value.toLowerCase();
+    var filteredQuotes = $localStorage.column.filter(card => {
+      if (card.nameColumn.toString().toLowerCase().indexOf(searchValue) !== -1) {
+        return true;
+      }
+    });
+    $scope.column = filteredQuotes
+  }
+
 });
 
-angularRoutingApp.directive('focusMe', function($timeout) {
+angularRoutingApp.directive('focusMe', function ($timeout) {
   return {
     scope: { trigger: '@focusMe' },
-    link: function(scope, element) {
-      scope.$watch('trigger', function(value) {
-        if(value === "true") { 
+    link: function (scope, element) {
+      scope.$watch('trigger', function (newVal) {
+        if (newVal === "true") {
           // console.log('trigger',value);
-          $timeout(function() {
-            element[0].focus(); 
+          $timeout(function () {
+            for(const item of element[0].classList) {
+              if(item == 'ng-empty'){
+                element[0].focus();
+              }
+              if(item == 'ng-not-empty'){
+                element[0].blur();
+              }
+            }
           });
         }
       });
@@ -81,16 +105,23 @@ angularRoutingApp.directive('focusMe', function($timeout) {
   };
 });
 
-angularRoutingApp.directive('focusInput', function($timeout) {
+angularRoutingApp.directive('focusInput', function ($timeout) {
   return {
-    link: function(scope, element, attrs) {
-      scope.$watch(attrs.focusInput, function(value) {
-        if(value === true) { 
-          console.log('value=',value);
-          //$timeout(function() {
-            element[0].focus();
-            scope[attrs.focusMe] = false;
-          //});
+    link: function (scope, element, attrs) {
+    scope.$watch(attrs.focusInput, function (newVal) {
+        if (newVal === true) {
+         
+          $timeout(function () {
+            for( const item of element[0].classList) {
+              if(item == 'ng-empty'){
+                element[0].focus();
+              }
+              if(item == 'ng-not-empty'){
+                element[0].blur();
+              }
+            }
+          });
+
         }
       });
     }
