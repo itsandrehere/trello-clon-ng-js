@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "angular": "^1.7.5",
+    "angular-drag-and-drop-lists": "^2.1.0",
     "angular-loader": "^1.7.5",
     "angular-route": "^1.7.5",
     "html5-boilerplate": "0.0.1"
@@ -27,8 +28,9 @@
     "postinstall": "npm run copy-libs",
     "update-deps": "npm update",
     "postupdate-deps": "npm run copy-libs",
+    "prestart": "npm run copy-libs",
     "copy-libs": "cpx \"node_modules/{angular,angular-*,html5-boilerplate/dist}/**/*\" app/lib -C",
-    "start": "http-server -a localhost -p 8000 -c-1 ./app ",
+    "start": "http-server ./app -a localhost -p 8080 -c-1",
     "test": "karma start karma.conf.js",
     "test-single-run": "npm test -- --single-run",
     "update-webdriver": "webdriver-manager update --gecko false",

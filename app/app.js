@@ -1,6 +1,6 @@
 'use strict';
 
-var angularRoutingApp = angular.module('myApp', ['ngRoute', 'dndLists']);
+var angularRoutingApp = angular.module('myApp', ['ngRoute', 'dndLists', 'ngStorage']);
 
 
 angularRoutingApp.config(function ($routeProvider) {
@@ -13,32 +13,15 @@ angularRoutingApp.config(function ($routeProvider) {
   });
 });
 
-angularRoutingApp.controller('homeController', function ($scope, $location) {
+angularRoutingApp.controller('homeController', function ($scope, $location, $localStorage) {
   console.log("entrando")
-
-    
-  $scope.column = [
-    {
-      nameColumn: 'prueba1',
-      card:[
-        { title: 'card 1' },
-      ]
-    }, {
-      nameColumn: 'prueba2',
-      card:[
-        { title: 'card 1' },
-      ]
-    }, {
-      nameColumn: 'prueba3',
-      card:[
-        { title: 'card 1' },
-        { title: 'card 2' },
-        { title: 'card 3' }
-      ]
-    }
-  ];
-
-
+ 
+  //validando el storage
+  if($localStorage.column !== undefined){
+    $scope.column  = $localStorage.column 
+  }else{
+    $scope.column = [];
+  }
 
   // funciones
 
@@ -46,6 +29,7 @@ angularRoutingApp.controller('homeController', function ($scope, $location) {
   $scope.addColumn = function () { 
     $scope.column.push({nameColumn: '', card: []});
     $scope.inputColumn = true;
+   
   }
   
   $scope.addCards = function (list) { 
@@ -55,24 +39,28 @@ angularRoutingApp.controller('homeController', function ($scope, $location) {
 
   $scope.deleteColumn = function (index) { 
     $scope.column.splice(index,1);
+    $localStorage.column = $scope.column;
   }
 
   $scope.deleteCard = function (list, index) { 
     list.splice(index,1);
-  }
-
+    $localStorage.column = $scope.column;
+  }  
 
   //actiones
   $scope.beforeClickName = function (list) { 
     if(list.nameColumn == ''){
       $scope.column.pop();
     }
+    $localStorage.column = $scope.column;
   }
  
   $scope.beforeClickCard = function (item, list) { 
     if(item.title == undefined){
       list.pop();
     }
+    //actualizando storage
+    $localStorage.column = $scope.column;
   }
  
 });
